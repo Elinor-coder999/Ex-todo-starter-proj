@@ -11,7 +11,7 @@ export const UPDATE_TODO = 'UPDATE_TODO'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const initialState = {
-    todos : [],
+    todos: [],
 
 }
 
@@ -27,12 +27,17 @@ function appReducer(state = initialState, cmd = {}) {
                 ...state,
                 todos: state.todos.filter(todo => todo._id !== cmd.todoId)
             }
-        case CHANGE_BY:
+        case ADD_TODO:
             return {
                 ...state,
-                count: state.count + cmd.diff
+                todos: [...state.todos, cmd.todo]
             }
-        default: return state    
+        case UPDATE_TODO:
+            return {
+                ...state,
+                todos: state.todos.map(todo => (todo._id === cmd.todo._id) ? cmd.todo : todo)
+            }
+        default: return state
     }
 }
 

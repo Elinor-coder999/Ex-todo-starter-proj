@@ -1,4 +1,4 @@
-import { REMOVE_TODO, SET_TODOS, store } from "../store.js"
+import { ADD_TODO, REMOVE_TODO, SET_TODOS, store, UPDATE_TODO } from "../store.js"
 import { todoService } from "../../services/todo.service.js"
 
 export function loadTodos(filterBy){
@@ -19,6 +19,18 @@ export function removeTodo(todoId){
             })
             .catch(err => {
                 console.error('Todos actions -> Cannot remove todo', err)
+                throw err
+            })
+}
+
+export function saveTodo(todo){
+    const type = todo._id ? UPDATE_TODO : ADD_TODO
+    return todoService.save(todo)
+            .then(savedTodo => {
+                store.dispatch({type, todo: savedTodo})
+            })
+            .catch(err => {
+                console.error('Todos actions -> Cannot save todo', err)
                 throw err
             })
 }

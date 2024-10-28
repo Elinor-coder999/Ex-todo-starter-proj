@@ -4,7 +4,7 @@ import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { SET_TODOS } from "../store/store.js"
-import { loadTodos, removeTodo } from "../store/actions/todo.action.js"
+import { loadTodos, removeTodo, saveTodo } from "../store/actions/todo.action.js"
 
 const { useState, useEffect } = React
 const { Link, useSearchParams } = ReactRouterDOM
@@ -25,7 +25,7 @@ export function TodoIndex() {
 
     useEffect(() => {
         setSearchParams(filterBy)
-       loadTodos(filterBy)
+        loadTodos(filterBy)
             .catch(err => {
                 console.error('err:', err)
                 showErrorMsg('Cannot load todos')
@@ -33,13 +33,26 @@ export function TodoIndex() {
     }, [filterBy])
 
     function onRemoveTodo(todoId) {
-       removeTodo(todoId)
+        removeTodo(todoId)
             .then(() => {
                 showSuccessMsg('Todo removed')
             })
             .catch(err => {
                 console.log('Cannot remove Todo', err)
                 showErrorMsg('Cannot remove Todo')
+            })
+    }
+
+    function onAddTodo() {
+        const todoToSave = todoService.getEmptyTodo()
+
+        saveTodo(todoToSave)
+            .then((savedTodo) => {
+                showSuccessMsg(`Todo added (id: ${savedTodo._id})`)
+            })
+            .catch(err => {
+                console.log('Cannot add Todo', err)
+                showErrorMsg('Cannot add Todo')
             })
     }
 
