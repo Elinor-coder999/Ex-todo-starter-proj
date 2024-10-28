@@ -22,10 +22,10 @@ function appReducer(state = initialState, cmd = {}) {
                 ...state,
                 todos: cmd.todos
             }
-        case DECREMENT:
+        case REMOVE_TODO:
             return {
                 ...state,
-                count: state.count - 1
+                todos: state.todos.filter(todo => todo._id !== cmd.todoId)
             }
         case CHANGE_BY:
             return {
