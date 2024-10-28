@@ -1,19 +1,26 @@
 const { createStore } = Redux
 
-export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
 export const CHANGE_BY = 'CHANGE_BY'
 
+// Todo
+export const SET_TODOS = 'SET_TODOS'
+export const REMOVE_TODO = 'REMOVE_TODO'
+export const ADD_TODO = 'ADD_TODO'
+export const UPDATE_TODO = 'UPDATE_TODO'
+export const SET_IS_LOADING = 'SET_IS_LOADING'
+
 const initialState = {
-    count: 101,
+    todos : [],
+
 }
 
 function appReducer(state = initialState, cmd = {}) {
     switch (cmd.type) {
-        case INCREMENT:
+        case SET_TODOS:
             return {
                 ...state,
-                count: state.count + 1
+                todos: cmd.todos
             }
         case DECREMENT:
             return {
