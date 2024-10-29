@@ -12,7 +12,7 @@ export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const initialState = {
     todos: [],
-
+    isLoading: false
 }
 
 function appReducer(state = initialState, cmd = {}) {
@@ -36,6 +36,11 @@ function appReducer(state = initialState, cmd = {}) {
             return {
                 ...state,
                 todos: state.todos.map(todo => (todo._id === cmd.todo._id) ? cmd.todo : todo)
+            }
+        case SET_IS_LOADING:
+            return {
+                ...state,
+                isLoading: cmd.isLoading
             }
         default: return state
     }

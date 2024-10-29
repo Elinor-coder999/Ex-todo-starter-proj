@@ -16,6 +16,7 @@ export function TodoIndex() {
     const todos = useSelector(storeState => storeState.todos)
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
+    const isLoading = useSelector(storeState => storeState.isLoading)
 
     const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
 
@@ -56,6 +57,20 @@ export function TodoIndex() {
             })
     }
 
+    function onEditTodo(todo) {
+        const importance = +prompt('Update importance?')
+        const todoToSave = { ...todo, importance }
+
+        saveCar(todoToSave)
+            .then((savedTodo) => {
+                showSuccessMsg(`Car updated to price: $${savedTodo.importance}`)
+            })
+            .catch(err => {
+                console.log('Cannot update todo', err)
+                showErrorMsg('Cannot update todo')
+            })
+    }
+
     function onToggleTodo(todo) {
         const todoToSave = { ...todo, isDone: !todo.isDone }
         todoService.save(todoToSave)
@@ -77,7 +92,9 @@ export function TodoIndex() {
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
             <h2>Todos List</h2>
-            <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
+            { isLoading 
+            ?<p>Loading</p>
+            :<TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />}
             <hr />
             <h2>Todos Table</h2>
             <div style={{ width: '60%', margin: 'auto' }}>

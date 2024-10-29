@@ -1,7 +1,9 @@
-import { ADD_TODO, REMOVE_TODO, SET_TODOS, store, UPDATE_TODO } from "../store.js"
+import { ADD_TODO, REMOVE_TODO, SET_IS_LOADING, SET_TODOS, store, UPDATE_TODO } from "../store.js"
 import { todoService } from "../../services/todo.service.js"
 
 export function loadTodos(filterBy){
+
+    store.dispatch({type:SET_IS_LOADING, isLoading:true})
     return todoService.query(filterBy)
             .then(todos => {
                 store.dispatch({ type: SET_TODOS, todos })
@@ -9,6 +11,9 @@ export function loadTodos(filterBy){
             .catch(err => {
                 console.error('Todos actions -> Cannot load todos', err)
                 throw err
+            })
+            .finally(()=>{
+                store.dispatch({type:SET_IS_LOADING, isLoading:false})
             })
 }
 
@@ -28,6 +33,7 @@ export function saveTodo(todo){
     return todoService.save(todo)
             .then(savedTodo => {
                 store.dispatch({type, todo: savedTodo})
+                return savedTodo
             })
             .catch(err => {
                 console.error('Todos actions -> Cannot save todo', err)
