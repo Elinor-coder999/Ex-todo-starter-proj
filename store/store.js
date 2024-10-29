@@ -1,3 +1,5 @@
+import { userService } from "../services/user.service.js"
+
 const { createStore } = Redux
 
 export const DECREMENT = 'DECREMENT'
@@ -10,9 +12,14 @@ export const ADD_TODO = 'ADD_TODO'
 export const UPDATE_TODO = 'UPDATE_TODO'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
+// User
+export const SET_USER = 'SET_USER'
+// export const SET_USER_SCORE = 'SET_USER_SCORE'
+
 const initialState = {
     todos: [],
-    isLoading: false
+    isLoading: false,
+    loggedinUser: userService.getLoggedinUser()
 }
 
 function appReducer(state = initialState, cmd = {}) {
@@ -42,9 +49,16 @@ function appReducer(state = initialState, cmd = {}) {
                 ...state,
                 isLoading: cmd.isLoading
             }
+
+        case SET_USER:
+            return {
+                ...state,
+                loggedinUser: cmd.user
+            }
         default: return state
     }
 }
+
 
 
 export const store = createStore(appReducer)
